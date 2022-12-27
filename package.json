@@ -1,0 +1,25 @@
+{
+  "name": "mididropbox",
+  "version": "1.0.0",
+  "description": "Drop box for midijukebox to pull MIDI files from",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/belbeeno/mididropbox.git"
+  },
+  "author": "belbeeno",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/belbeeno/mididropbox/issues"
+  },
+  "homepage": "https://github.com/belbeeno/mididropbox#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.30.0"
+  }
+}
