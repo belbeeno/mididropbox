@@ -3,11 +3,9 @@
 // Includes
 const express = require('express');
 const path = require('node:path');
-const logger = require('morgan');
 
 // Set up ExpressJS
 const app = express();
-app.use(logger('dev'));
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 
