@@ -8,7 +8,7 @@
     <main class="form-signin shadow-lg bg-body rounded">
         <div class="container p-5">
             <h1 class="row mb-4">Upload to the Jukebox</h1>
-            <form id="form" class="g-3">
+            <form id="form" class="g-3" action="/upload_files" enctype="multipart/form-data">
                 <div class="row mb-3">
                     <label for="textName" class="col-sm-2 col-form-label">Name</label>
                     <div class="col-sm-10">
@@ -22,7 +22,15 @@
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <button type="submit" id="btnSubmit" class="btn btn-primary">Send</button>
+                    <button type="submit" id="btnSubmit" class="btn btn-primary">
+                        <span id="show-on-sending" class="visually-hidden">
+                            <span class="spinner-border spinnger-border-sm" role="status" aria-hidden="true"></span>
+                            Loading...
+                        </span>
+                        <span id="hide-on-sending">
+                            Send
+                        </span>
+                    </button>
                 </div>
             </form>
             <img src="/static/img/worm.gif" />
