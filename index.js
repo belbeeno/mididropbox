@@ -18,10 +18,10 @@ var multerStorage = multer.diskStorage({
         cb(null, "public");
     },
     filename: function (req, file, cb) {
+        var ext = sanitizer.sanitize(file.mimetype.split('/')[1]);
         var submitter = sanitizer.sanitize(req.body.name);
-        var filename = sanitizer.sanitize(file.originalname);
-        console.log("new file submitted:", submitter, filename);
-        cb(null, "midis/".concat(Date.now(), "-").concat(submitter, "-").concat(file.originalname));
+        var filename = sanitizer.sanitize(file.filename);
+        cb(null, "midis/".concat(Date.now(), "-").concat(submitter, "-").concat(filename, ".").concat(ext));
     },
 });
 var multerFileFilter = function (req, file, cb) {
@@ -43,6 +43,8 @@ app.get('/', function (req, res) {
     res.status(200).render('index');
 });
 app.post('/upload_file', upload.single("file"), function (req, res, next) {
+    console.log(req.body.name);
+    console.log(req.file);
     try {
         res.status(200).json({
             status: "success",

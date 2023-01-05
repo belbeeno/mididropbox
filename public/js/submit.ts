@@ -14,18 +14,27 @@ function canSubmit() : boolean {
 
 function refreshCanSubmit() {
     const btnSubmit = document.getElementById("btnSubmit");
+    const lblStatus = document.getElementById("lblStatus");
     if (canSubmit()) {
         btnSubmit.removeAttribute('disabled');
+        lblStatus.innerText = "Ready";
     }
     else {
         btnSubmit.setAttribute('disabled', '');
+        lblStatus.innerText = "Pending files...";
     }
+}
+
+function displayHelp() {
+    alert("Made by belbeeno!  2023\n");
 }
 
 function submitForm(e : Event) {
     e.preventDefault();
     const txtName : HTMLInputElement = document.getElementById("textName") as HTMLInputElement;
     const frmFile : HTMLInputElement = document.getElementById("formFile") as HTMLInputElement;
+    const btnSubmit = document.getElementById("btnSubmit");
+    btnSubmit.setAttribute('disabled', '');
     console.log('submitting name: \"' + txtName.value + '\" file: [' + frmFile.files[0].name + ']');
 
     const formData = new FormData();
@@ -37,24 +46,14 @@ function submitForm(e : Event) {
         const filesize = frmFile.files[0].size;
         console.log("uploading: ", e.loaded, " / ", filesize);
 
-        const btnSubmit = document.getElementById("btnSubmit");
+        const lblStatus = document.getElementById("lblStatus");
         console.log("got Button");
-        const showOnSending = document.getElementById('show-on-sending');
-        console.log("got show on sending");
-        console.log(showOnSending);
-        const hideOnSending = document.getElementById('hide-on-sending');
-        console.log("got hide on sending");
-        console.log(hideOnSending);
 
         if (e.loaded < filesize) {
-            btnSubmit.setAttribute('disabled', '');
-            showOnSending.classList.remove('visually-hidden');
-            hideOnSending.classList.add('visually-hidden');
+            lblStatus.innerText = 'Sending...';
         }
         else {
-            btnSubmit.removeAttribute('disabled');
-            showOnSending.classList.add('visually-hidden');
-            hideOnSending.classList.remove('visually-hidden');
+            lblStatus.innerText = 'File sent!'
         }
     });
     req.open('POST', '/upload_file');
