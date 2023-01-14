@@ -2,16 +2,20 @@
 
 // Includes
 const express = require('express');
+const fs = require('fs');
 const multer = require('multer');
 const path = require('node:path');
-const sanitizer = require('string-sanitizer');
+const serve = require('serve-index');
 
 const app = express();
 
 // ExpressJS Setup
 app.use(express.json());
-app.use('/static', express.static(path.join(__dirname, 'public')));
+app.use(require('sanitize').middleware)
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
+//app.use('/midis', express.static('public/midis'), serve('public/midis', {'icons': true}));
+
 
 // EJS Setup
 app.set('view engine', 'ejs');
@@ -20,13 +24,17 @@ app.set('views', path.join(__dirname, 'views'));
 // Multer Setup
 const multerStorage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, "public");
+        cb(null, "public/midis");
     },
     filename: (req, file, cb) => {
-        const ext = sanitizer.sanitize(file.mimetype.split('/')[1]);
-        const submitter = sanitizer.sanitize(req.body.name);
-        const filename = sanitizer.sanitize(file.filename);
-        cb(null, `midis/${Date.now()}-${submitter}-${filename}.${ext}`);
+        const ext = file.mimetype.split('/')[1];
+        const submitter = req.body.name;
+        console.log("FGSFDS");
+        console.log(file);
+        console.log(file.originalname);
+        console.log(file.originalname.split('.')[0]);
+        const filename = file.originalname.split('.')[0];
+        cb(null, `${Date.now()}-${submitter}-${filename}.${ext}`);
     },
 });
 const multerFileFilter = (req, file, cb) => {
@@ -59,7 +67,14 @@ app.post('/upload_file', upload.single("file"), (req, res, next) => {
         res.json({e,});
     }
 });
-
+app.get('/playlist', (req, res) => {
+    var files = fs.readdirSync('public/midis', {withFileTypes: true});
+    var midis = [];
+    for (let i = 0; i < files.length; i++) {
+        midis[i] = files[i].name
+    }
+    res.status(200).json({ midis });
+})
 
 process.on('uncaughtexception', (e) => {
     console.log("UNCAUGHT EXCEPTION, SHUTTING DOWN!!!");
